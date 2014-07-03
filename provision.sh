@@ -1,5 +1,5 @@
 #!/bin/bash
-VERSION="2.8.5"
+VERSION="2.8.12"
 
 # install build tools
 sudo apt-get update
