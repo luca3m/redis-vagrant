@@ -11,12 +11,15 @@ HOSTS = { "redis01" => "192.168.57.2",
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   HOSTS.each do |r|
-    config.vm.define r[0] do |rabbit|
-      rabbit.vm.provision 'shell', path: "provision.sh"
-      rabbit.vm.box = "precise32"
-      rabbit.vm.box_url = "http://files.vagrantup.com/precise32.box"
-      rabbit.vm.network :private_network, ip: r[1]
-      rabbit.vm.hostname = r[0]
+    config.vm.define r[0] do |v|
+      v.vm.provision 'shell', path: "provision.sh"
+      v.vm.box = "ubuntu/trusty32"
+      v.vm.provider "virtualbox" do |vbox|
+        vbox.memory = 256
+        vbox.cpus = 1
+      end
+      v.vm.network :private_network, ip: r[1]
+      v.vm.hostname = r[0]
     end
   end
 end
