@@ -6,8 +6,9 @@ HOSTS = { :redis01 => "192.168.57.2",
           :redis03 => "192.168.57.4"
 }
 
-CONNECTIONS = HOSTS.map do |k, v|
-  Redis.new host: v
+CONNECTIONS = HOSTS.inject({}) do |c, (k, v)|
+  c[k] = Redis.new host: v
+  c
 end
 
 $sentinel = Redis.new host: HOSTS[:redis01], port: 26379
@@ -29,4 +30,6 @@ when :restore
   end
 when :status
   puts $sentinel.info['master0']
+when :console
+  exec("redis-cli -h #{HOSTS[ARGV[1].to_sym]}")
 end
